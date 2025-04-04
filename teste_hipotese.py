@@ -1,5 +1,6 @@
 import numpy as np
 from scipy import stats
+import matplotlib.pyplot as plt
 
 dados_idle = [
     9.1909, 9.8692, 9.2363, 9.8887, 10.0253, 9.0121, 9.6410, 11.2233, 8.6699, 9.5207,
@@ -47,3 +48,14 @@ if p_valor < alpha:
     print("Rejeita-se H0. Evidências indicam que a média é diferente de 10.")
 else: 
     print("Não rejeitamos H0, não há evidência suficiente de que a média é diferente de 10.")
+
+
+plt.hist(dados_idle, bins=20, edgecolor='black')
+plt.axvline(media_esperada, color='red', linestyle='dashed', linewidth=1.5, label='Média esperada (10)')
+plt.axvline(media_amostral, color='green', linestyle='dashed', linewidth=1.5, label=f'Média amostral ({media_amostral:.2f})')
+plt.title('Distribuição dos valores Idle')
+plt.xlabel('Valor')
+plt.ylabel('Frequência')
+plt.legend()
+plt.grid(True)
+plt.show()
