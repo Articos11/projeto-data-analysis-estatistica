@@ -49,7 +49,22 @@ if p_valor < alpha:
 else: 
     print("Não rejeitamos H0, não há evidência suficiente de que a média é diferente de 10.")
 
+# Função para calcular intervalo de confiança
+def intervalo_confianca(media, desvio, n, nivel):
+    df = n - 1  # agora df está dentro da função
+    t_critico = stats.t.ppf(1 - (1 - nivel)/2, df)
+    erro_padrao = desvio / np.sqrt(n)
+    margem = t_critico * erro_padrao
+    return media - margem, media + margem
 
+
+# Intervalos de confiança
+niv_conf = [0.90, 0.95, 0.99]
+for nc in niv_conf:
+    inf, sup = intervalo_confianca(media_amostral, desvio_padrao, n, nc)
+    print(f"Intervalo de confiança {int(nc*100)}%: ({inf:.4f}, {sup:.4f})")
+
+# Gráfico
 plt.hist(dados_idle, bins=20, edgecolor='black')
 plt.axvline(media_esperada, color='red', linestyle='dashed', linewidth=1.5, label='Média esperada (10)')
 plt.axvline(media_amostral, color='green', linestyle='dashed', linewidth=1.5, label=f'Média amostral ({media_amostral:.2f})')

@@ -1,6 +1,5 @@
-#Desvio Padrão, Variância e Coeficiente de variação.
-
-import statistics
+import matplotlib.pyplot as plt
+import pandas as pd
 
 dados_idle = [
     9.1909, 9.8692, 9.2363, 9.8887, 10.0253, 9.0121, 9.6410, 11.2233, 8.6699, 9.5207,
@@ -27,15 +26,15 @@ dados_idle = [
     9.6113, 9.4023, 10.9853, 8.9627, 9.1211, 10.3541, 6.5416, 9.9387, 12.7051, 8.6285
 ]
 
-def desvio_padrao(dados_idle):
-    return statistics.stdev(dados_idle)
+# Criar DataFrame com índice como tempo simulado
+df = pd.DataFrame(dados_idle, columns=['Idle_data'])
+df['Tempo'] = df.index  # tempo simulado
 
-def variancia(dados_idle):
-    return statistics.variance(dados_idle)
-
-def coefic_variacao(desvio_padrao, media):
-    return desvio_padrao/media
-
-print(f'{desvio_padrao(dados_idle):.3f}')
-print(f'{variancia(dados_idle):.3f}')
-print(f'{coefic_variacao(desvio_padrao(dados_idle), 9.85):.3f}')
+# Gráfico temporal
+plt.figure(figsize=(12, 6))
+plt.plot(df['Tempo'], df['Idle_data'], marker='o', linestyle='-', color='blue')
+plt.title('Gráfico Temporal dos Dados Idle')
+plt.xlabel('Tempo (índice)')
+plt.ylabel('Valor de Idle')
+plt.grid(True)
+plt.show()

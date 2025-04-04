@@ -29,12 +29,12 @@ dados_idle = [
 def media(dados):
     return sum(dados)/len(dados)
 media = media(dados_idle)
-print(f'{media:.2f}')
+print(f'{media:.3f}')
 
 # Quartis. 
 # Os valores são impressos em sequência de primeiro, segundo e terceiro quartis. Não faço a menor ideia de como arredondar. 
 def quartis(dados):
-    quartis = np.percentile(dados, [25, 50, 75])
+    quartis = np.percentile(dados, [0, 25, 50, 75])
     return quartis
 quartis = quartis(dados_idle)
 r_quartis = ', '.join(map(str, quartis))

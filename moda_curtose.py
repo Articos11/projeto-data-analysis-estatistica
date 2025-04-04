@@ -29,8 +29,10 @@ df = pd.DataFrame(dados_idle, columns=['Idle_data'])
 # Moda = Repetições com frequência
 # Curtose é a medida da forma da curva da distribuição de probabilidade.
 moda = df['Idle_data'].mode()
+mediana = df['Idle_data'].mean()
 curtose = df['Idle_data'].kurtosis()
 
 moda_str = ', '.join(map(str, moda))
 print(f'A(s) moda(s) é (são): {moda_str}')
 print(f'A curtose é: {curtose:.4f}')
+print(f'A mediana de é de: {mediana:.4f}')
