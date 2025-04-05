@@ -27,42 +27,48 @@ dados_idle = [
     9.6113, 9.4023, 10.9853, 8.9627, 9.1211, 10.3541, 6.5416, 9.9387, 12.7051, 8.6285
 ]
 
-media_esperada = 10 # H0: média == 10
+media_esperada = 10  # H0: média == 10
 
-# Dados da amostra
+# Estatísticas da amostra
 media_amostral = np.mean(dados_idle)
-desvio_padrao = np.std(dados_idle, ddof=1)
+desvio_amostral = np.std(dados_idle, ddof=1)
 n = len(dados_idle)
 
-# Teste t
-t_stat, p_valor = stats.ttest_1samp(dados_idle, popmean=media_esperada)
+# Como não temos o desvio padrão populacional, vamos usar o desvio amostral como aproximação
+erro_padrao = desvio_amostral / np.sqrt(n)
+z_stat = (media_amostral - media_esperada) / erro_padrao
+p_valor = 1 - stats.norm.cdf(z_stat) # Teste bicaudal
 
 print(f'Média amostral: {media_amostral:.4f}')
-print(f'Desvio padrão amostral: {desvio_padrao:.4f}')
-print(f'Tamanho da amostra {n}')
-print(f'Estatistica t: {t_stat:.4f}')
+print(f'Desvio padrão amostral: {desvio_amostral:.4f}')
+print(f'Tamanho da amostra: {n}')
+print(f'Estatística Z: {z_stat:.4f}')
 print(f'P-valor: {p_valor:.4f}')
 
-alpha = 0.05 #nivel de significância com nível de confiância de 95%
+
+
+alpha = 0.05
 if p_valor < alpha:
     print("Rejeita-se H0. Evidências indicam que a média é diferente de 10.")
-else: 
+else:
     print("Não rejeitamos H0, não há evidência suficiente de que a média é diferente de 10.")
 
-# Função para calcular intervalo de confiança
-def intervalo_confianca(media, desvio, n, nivel):
-    df = n - 1  # agora df está dentro da função
-    t_critico = stats.t.ppf(1 - (1 - nivel)/2, df)
+# Valor crítico para teste bicaudal com alfa = 0.05
+z_critico = stats.norm.ppf(1 - alpha / 2)
+print(f'Valor crítico Z (a = 0.05): ±{z_critico:.4f}')
+
+# Função para intervalo de confiança com Z
+def intervalo_confianca_z(media, desvio, n, nivel):
+    z_critico = stats.norm.ppf(1 - (1 - nivel) / 2)
     erro_padrao = desvio / np.sqrt(n)
-    margem = t_critico * erro_padrao
+    margem = z_critico * erro_padrao
     return media - margem, media + margem
 
-
-# Intervalos de confiança
+# Intervalos de confiança com Z
 niv_conf = [0.90, 0.95, 0.99]
 for nc in niv_conf:
-    inf, sup = intervalo_confianca(media_amostral, desvio_padrao, n, nc)
-    print(f"Intervalo de confiança {int(nc*100)}%: ({inf:.4f}, {sup:.4f})")
+    inf, sup = intervalo_confianca_z(media_amostral, desvio_amostral, n, nc)
+    print(f"Intervalo de confiança {int(nc*100)}% (Z): ({inf:.4f}, {sup:.4f})")
 
 # Gráfico
 plt.hist(dados_idle, bins=20, edgecolor='black')
